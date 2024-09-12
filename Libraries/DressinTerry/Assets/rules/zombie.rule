@@ -1,0 +1,74 @@
+{
+  "characterHeightOverride": null,
+  "characterHeightRandomRange": "0.8,1.2",
+  "clothingWhiteList": [],
+  "clothingBlacklsit": [],
+  "rules": [
+    {
+      "clothingRuleType": "FromListOnly",
+      "clothing": [
+        "models/citizen/skin/citizen_skin_zombie_01.clothing",
+        "models/citizen/skin/citizen_skin_zombie_02.clothing"
+      ],
+      "categories": [
+        "Hat",
+        "None"
+      ],
+      "subCategories": [],
+      "shouldShowClothing": true
+    },
+    {
+      "clothingRuleType": "Blacklist",
+      "clothing": [
+        "models/citizen_clothes/hat/bucket_hat/bucket_hat.clothing"
+      ],
+      "categoriesRuleType": "FromListOnly",
+      "categories": [
+        "Hat"
+      ],
+      "subCategories": [],
+      "chanceOf": 0.75,
+      "shouldShowClothing": true,
+      "shouldShowCategories": true,
+      "shouldShowCategoriesList": true,
+      "shouldShowSubCategories": true
+    },
+    {
+      "clothing": [],
+      "categoriesRuleType": "FromListOnly",
+      "categories": [
+        "Bottoms"
+      ],
+      "subCategories": [],
+      "shouldShowCategories": true,
+      "shouldShowCategoriesList": true,
+      "shouldShowSubCategories": true
+    },
+    {
+      "clothing": [],
+      "categoriesRuleType": "FromListOnly",
+      "categories": [
+        "Footwear"
+      ],
+      "subCategories": [],
+      "chanceOf": 0.9,
+      "shouldShowCategories": true,
+      "shouldShowCategoriesList": true,
+      "shouldShowSubCategories": true
+    },
+    {
+      "clothing": [],
+      "categoriesRuleType": "FromListOnly",
+      "categories": [
+        "Tops"
+      ],
+      "subCategories": [],
+      "chanceOf": 0.8,
+      "shouldShowCategories": true,
+      "shouldShowCategoriesList": true,
+      "shouldShowSubCategories": true
+    }
+  ],
+  "__references": [],
+  "__version": 0
+}

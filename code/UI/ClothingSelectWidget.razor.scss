@@ -1,0 +1,65 @@
+
+ClothingSelectWidget {
+	pointer-events: all;
+	width: 50%;
+	height: 45%;
+
+	.title {
+		text-shadow: none;
+		box-shadow: none;
+	}
+
+	.button {
+		pointer-events: all;
+	}
+
+	.keyboard-hint {
+		font-size: 40px;
+		color: white;
+		text-shadow: 1px 1px 2px black, 1px 1px 20px black;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		margin: 10px;
+		padding: 50px;
+	}
+
+	.container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		padding: 20px;
+		height: 100%;
+		position: relative;
+	}
+
+	.column {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.row {
+		display: flex;
+		flex-direction: row;
+		margin-bottom: 10px;
+		flex-wrap: wrap;
+	}
+
+	button {
+		margin-right: 10px;
+		padding: 10px;
+		background-color: lightblue;
+		border: 1px solid #ccc;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background-color: deepskyblue;
+	}
+
+	.clothing-image {
+		width: 100px;
+		height: 100px;
+		cursor: pointer;
+	}
+}

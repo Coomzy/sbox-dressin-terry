@@ -1,0 +1,76 @@
+
+CharacterSelectWidget {
+	pointer-events: all;
+
+	.title {
+		text-shadow: none;
+		box-shadow: none;
+	}
+
+	.button {
+		pointer-events: all;
+	}
+
+	.keyboard-hint {
+		font-size: 40px;
+		color: white;
+		text-shadow: 1px 1px 2px black, 1px 1px 20px black;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		margin: 10px;
+		padding: 50px;
+	}
+
+	.container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		padding: 20px;
+		height: 100vh;
+		position: relative; /* Ensure the container remains relative for absolute positioning of the column */
+	}
+
+	.column {
+		display: flex;
+		flex-direction: column; /* Ensures that the `.row` divs are stacked vertically */
+	}
+
+	.row {
+		display: flex;
+		flex-direction: row; /* Ensures that buttons within `.row` are aligned horizontally */
+		margin-bottom: 10px; /* Adds space between the rows */
+	}
+
+	button {
+		margin-right: 10px; /* Adds space between buttons */
+		padding: 10px; /* Adds padding inside buttons for better appearance */
+		background-color: lightblue;
+		border: 1px solid #ccc;
+		cursor: pointer; /* Changes the cursor when hovering over the button */
+	}
+
+	button:hover {
+		background-color: deepskyblue; /* Changes button color on hover */
+	}
+
+	.clothing-image {
+		width: 100px; /* Set the desired width */
+		height: 100px; /* Set the same height to make the image a square */
+		object-fit: cover; /* Ensure the image scales correctly within the square */
+		cursor: pointer; /* Shows pointer cursor to indicate the image is clickable */
+	}
+
+	.selection-clothing-container {
+		position: absolute; /* Absolute positioning to make the element move freely */
+		right: 0; /* Align to the right edge of the screen */
+		top: 0; /* Adjust as necessary to place it correctly on the vertical axis */
+		padding-right: 20px; /* Optional: Add some padding for space from the edge */
+		display: flex;
+		flex-direction: column;
+	}
+
+	.character-clothing-container {
+		justify-content: flex-end;
+	}
+}

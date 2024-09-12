@@ -1,0 +1,93 @@
+CurrentClothingWidget {
+	pointer-events: all;
+	position: absolute;
+	top: 0;
+	right: 0;
+
+	.clothing-info {
+		margin: 10px 10px;
+		padding: 10px;
+		background-color: #d0d0d0;
+		border: 1px solid #000;
+		margin-bottom: 20px;
+
+		h2 {
+			margin-top: 0;
+			text-align: center;
+		}
+
+		p {
+			margin: 5px 0;
+			font-size: 14px;
+		}
+
+		.slider-container {
+			display: flex;
+			align-items: center;
+
+			label {
+				margin-right: 10px;
+				font-size: 14px;
+			}
+		}
+	}
+
+	.container2 {
+		flex-direction: column;
+	}
+
+	.row {
+		flex-direction: row;
+	}
+
+	.container {
+		padding: 50px 20px;
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		flex-direction: column;
+		height: 110vh;
+	}
+
+	.column {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap-reverse;
+		height: 100%;
+	}
+
+	.button {
+		pointer-events: all;
+	}
+
+	button {
+		margin-bottom: 10px;
+		padding: 10px;
+		background-color: lightblue;
+		border: 1px solid #ccc;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background-color: deepskyblue;
+	}
+	/*.clothing-image {
+		max-width: 100px;
+		max-height: 100px;
+		width: auto;
+		height: auto;
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+		cursor: pointer;
+		margin-bottom: 10px;
+	}*/
+
+	.clothing-image {
+		width: 100px;
+		height: 100px;
+		cursor: pointer;
+		background-color: #f0f0f0;
+		margin-bottom: 10px;
+	}
+}

@@ -1,0 +1,41 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Audio;
+@using Sandbox.Services;
+@using System;
+@using System.IO;
+@using static PreviewCharacter;
+@using static UI_Sounds;
+@inherits PanelComponent
+
+<root>
+    <div class="container">        
+        <div class="row">
+            <TextEntry class="save-filepath-entry" style="background-color:darkgray; min-width: 250px;" type="text" placeholder="File path goes here..." Value:bind="@activeFilePath"></TextEntry>
+            <img src="textures/save.png" class="save-image" onclick="@(() => OpenSavePanel())" onmouseover="@Play_OnMouseOver" />
+            <img src="textures/load.png" class="load-image" onclick="@(() => OpenLoadPanel())" onmouseover="@Play_OnMouseOver" />
+        </div>
+    </div>
+</root>
+
+@code
+{
+    void OpenSavePanel()
+    {
+        Save(activeFilePath);
+        //var saveWidget = GameObject.Components.Get<SaveWidget>(true);
+        //saveWidget.Enabled = true;
+
+        Play_OnMouseClick();
+    }
+
+    void OpenLoadPanel()
+    {
+        var loadWidget = GameObject.Components.Get<LoadWidget>(true);
+        loadWidget.Enabled = true;
+
+        Play_OnMouseClick();
+    }
+
+    protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt());
+}

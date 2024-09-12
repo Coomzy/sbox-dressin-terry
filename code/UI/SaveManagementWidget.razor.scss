@@ -1,0 +1,60 @@
+
+SaveManagementWidget {
+	pointer-events: all;
+	position: absolute;
+	bottom: 0;
+	width: 80%;
+	height: 15%;
+	align-items: flex-end;
+
+	.button {
+		pointer-events: all;
+	}
+
+	.container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: flex-start;
+		padding: 20px;
+		height: 100vh;
+		position: relative;
+		flex-direction: column-reverse;
+	}
+
+	.row {
+		display: flex;
+		flex-direction: row; /* Ensures that buttons within `.row` are aligned horizontally */
+		margin-bottom: 10px; /* Adds space between the rows */
+		align-items: center;
+	}
+
+	button {
+		margin-right: 10px; /* Adds space between buttons */
+		padding: 10px; /* Adds padding inside buttons for better appearance */
+		background-color: lightblue;
+		border: 1px solid #ccc;
+		cursor: pointer;
+	}
+
+	button:hover {
+		background-color: deepskyblue; /* Changes button color on hover */
+	}
+
+	.save-filepath-entry {
+		height: 60%;
+	}
+
+	.save-image {
+		//width: 100px;
+		//height: 100px;
+		cursor: pointer;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.load-image {
+		//width: 100px;
+		//height: 100px;
+		cursor: pointer;
+	}
+}

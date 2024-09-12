@@ -1,0 +1,76 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Audio;
+@using Sandbox.Services;
+@using System;
+@using System.IO;
+@using static PreviewCharacter;
+@using static DressinTerry;
+@inherits PanelComponent
+
+<root>
+    <div class="box-container">
+        <div class="box-header">
+            Load Character
+        </div>
+
+        <div class="box-content">
+            @foreach (var file in filePaths)
+            {
+                <button class="button-file" onclick="@(() => SelectFile(file))">@file</button>
+            }
+        </div>
+
+        <div class="box-footer">
+            <button class="button-left" onclick="@(() => Close())">Close</button>
+        </div>
+    </div>
+
+</root>
+
+@code
+{
+    public List<string> filePaths = new List<string>();
+
+    bool IsPathValid()
+    {
+        char[] invalidChars = Path.GetInvalidPathChars();
+        if (activeFilePath.IndexOfAny(invalidChars) >= 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    protected override void OnEnabled()
+    {
+        base.OnEnabled();
+
+        filePaths = FileSystem.Data.FindFile("", $"*{extension}", true)
+            .Select(path => path.Replace($".{extension}", ""))
+            .Select(path => path.Replace($"characters/", ""))
+            .OrderBy(path => path)
+            .ToList();
+    }
+
+    void SelectFile(string file)
+    {
+        Log.Info($"file '{file}' selected!");
+        Load(file);
+        Close(false);
+        var soundHandle = Sound.Play("ui.button.press");
+        soundHandle.TargetMixer = Mixer.FindMixerByName("UI");
+    }
+
+    void Close(bool fromInput = true)
+    {
+        if (fromInput)
+        {
+            var soundHandle = Sound.Play("ui.navigate.back");
+            soundHandle.TargetMixer = Mixer.FindMixerByName("UI");
+        }
+        this.Enabled = false;    
+    }
+
+    protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt());
+}

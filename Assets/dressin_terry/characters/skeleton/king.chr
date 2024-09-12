@@ -1,0 +1,26 @@
+{
+  "clothingEntries": [
+    {
+      "clothing": "models/citizen_clothes/shorts/boxing_shorts/boxing_shorts.clothing",
+      "tintSelection": 0.5
+    },
+    {
+      "clothing": "models/citizen_clothes/hat/eye_cover/eye_cover.clothing",
+      "tintSelection": 0.5
+    },
+    {
+      "clothing": "models/citizen_clothes/shoes/slippers/slippers.clothing",
+      "tintSelection": 0.5
+    },
+    {
+      "clothing": "models/citizen_clothes/hair/hair_long_bangs/hair_long_bangs.clothing",
+      "tintSelection": 0.65
+    },
+    {
+      "clothing": "models/citizen/skin/skeleton/skeleton_clean_skin.clothing"
+    }
+  ],
+  "characterHeight": 1,
+  "__references": [],
+  "__version": 0
+}

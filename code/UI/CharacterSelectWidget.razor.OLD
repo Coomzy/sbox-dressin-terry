@@ -1,0 +1,319 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Audio;
+@using Sandbox.Services;
+@using System;
+@inherits PanelComponent
+
+<root>
+    <div class="container">
+        <div class="column">
+            <div class="row">
+                @foreach (var clothingCategory in clothingCategories)
+                {
+                    <button style="color: @SelectedColor(clothingCategory);" onclick="@(() => SelectCategory(clothingCategory))">@clothingCategory.ToString()</button>
+                }
+            </div>
+            <div class="row">
+                @foreach (var clothingSubCategory in clothingSubCategories)
+                {
+                    var subCat = string.IsNullOrWhiteSpace(clothingSubCategory) ? "None" : clothingSubCategory;
+                    <button style="color: @SelectedColor(clothingSubCategory);" onclick="@(() => SelectSubCategory(clothingSubCategory))">@subCat</button>
+                }
+            </div>
+            <div class="row">
+                @foreach (var clothes in clothing)
+                {
+                    <img style="background-color: @SelectedColor(clothes);" src="@clothes.Icon.Path" class="clothing-image" onclick="@(() => SelectClothing(clothes))" />
+                }
+            </div>
+            <div class="row character-clothing-container">
+                <div class="column">
+                    @foreach (var catToSubCat in characterClothing)
+                    {
+                        foreach (var subCatToClothing in catToSubCat.Value)
+                        {
+                            if (subCatToClothing.Value == null)
+                                continue;
+                            var clothes = subCatToClothing.Value;
+                            <img style="background-color: @SelectedColor(clothes);" src="@clothes.Icon.Path" class="clothing-image" onclick="@(() => SelectClothing(clothes))" />
+                        }
+                    }
+                    @*<label>Character Clothing</label>
+                    @foreach (var catToSubCat in characterClothing)
+                    {
+                        foreach (var subCatToClothing in catToSubCat.Value)
+                        {
+                            if (subCatToClothing.Value == null)
+                                continue;
+                            <label>@($"Category: '{catToSubCat.Key}' - SubCategory: '{subCatToClothing.Key}' - Clothing: '{subCatToClothing.Value?.ResourceName}'")</label>
+                        }
+                    }*@
+                </div>
+            </div>
+            <div class="row" style="background-color:darkgray">
+                <TextEntry type="text" placeholder="File path goes here..." Value:bind="@activeFilePath"></TextEntry>
+                <img src="textures/save.png" onclick="@(() => Save())" />
+                <img src="textures/load.png" onclick="@(() => Load())" />
+            </div>
+        </div>
+    </div>
+</root>
+
+@code
+{
+    [Property] public string activeFilePath = "example";
+    [Property] public Clothing.ClothingCategory selectedCategory = Clothing.ClothingCategory.Skin;
+    [Property] public string selectedSubCategory = "";
+    [Property] public Clothing selectedClothing
+    {
+        get
+        {
+            if (characterClothing == null || !characterClothing.ContainsKey(selectedCategory))
+            {
+                return null;
+            }
+            if (characterClothing[selectedCategory] == null || !characterClothing[selectedCategory].ContainsKey(selectedSubCategory))
+            {
+                return null;
+            }
+            return characterClothing[selectedCategory][selectedSubCategory];
+        }
+    }
+
+    public List<Clothing> allClothing { get; set; } = new List<Clothing>();
+
+    public List<Clothing.ClothingCategory> clothingCategories { get; set; } = new List<Clothing.ClothingCategory>();
+    public List<string> clothingSubCategories { get; set; } = new List<string>();
+    public List<Clothing> clothing { get; set; } = new List<Clothing>();
+
+    [Property] public Dictionary<Clothing.ClothingCategory, Dictionary<string, Clothing>> characterClothing = new Dictionary<Clothing.ClothingCategory, Dictionary<string, Clothing>>();
+
+    public string SelectedColor(Clothing.ClothingCategory clothingCategory)
+    {
+        return clothingCategory == selectedCategory ? "white" : "black";
+    }
+
+    public string SelectedColor(string clothingSubCategory)
+    {
+        return clothingSubCategory == selectedSubCategory ? "white" : "black";
+    }
+
+    public string SelectedColor(Clothing clothes)
+    {
+        return clothes == selectedClothing ? "white" : "transparent";
+    }
+
+    protected override void OnAwake()
+    {
+        Mouse.Visible = true;
+        allClothing = ResourceLibrary.GetAll<Clothing>().ToList();
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (clothingCategories.Contains(clothingEntry.Category))
+                continue;
+
+            clothingCategories.Add(clothingEntry.Category);
+        }
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (!characterClothing.ContainsKey(clothingEntry.Category))
+            {
+                characterClothing[clothingEntry.Category] = new Dictionary<string, Clothing>();
+            }
+        }
+
+        foreach (var clothingEntry in allClothing)
+        {
+            characterClothing[clothingEntry.Category][GetSubCategory(clothingEntry)] = null;
+        }
+
+        SelectCategory(Clothing.ClothingCategory.Skin);
+    }
+
+    protected override void OnStart()
+    {
+        var characterJson = FileSystem.Data.ReadAllText("active.json");
+        var clothingContainer = new ClothingContainer();
+        clothingContainer.Deserialize(characterJson);
+        //clothingContainer.Apply(PreviewCharacter.instance.bodyRenderer);
+
+        foreach (var clothing in clothingContainer.Clothing)
+        {
+            var subCat = GetSubCategory(clothing.Clothing);
+            characterClothing[clothing.Clothing.Category][subCat] = clothing.Clothing;
+        }
+
+        RebuildCharacter();
+    }
+
+    void SelectCategory(Clothing.ClothingCategory category)
+    {
+        selectedCategory = category;
+        clothingSubCategories.Clear();
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (clothingEntry.Category != category)
+                continue;
+
+            string subCat = GetSubCategory(clothingEntry);
+
+            if (clothingSubCategories.Contains(subCat))
+                continue;
+
+            //Log.Info($"Category: {clothingEntry.Category}, subCat: {subCat}, clothing: {clothingEntry.ResourceName}");
+            clothingSubCategories.Add(subCat);
+        }
+
+        if (clothingSubCategories.Count > 0)
+        {
+            SelectSubCategory(clothingSubCategories[0]);
+        }
+        else
+        {
+            SelectSubCategory("");
+        }
+    }
+
+    void SelectSubCategory(string subCategory)
+    {
+        selectedSubCategory = subCategory;
+        clothing.Clear();
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (clothingEntry.Category != selectedCategory)
+                continue;
+
+            string subCat = GetSubCategory(clothingEntry);
+            if (subCat != selectedSubCategory)
+                continue;
+
+            if (clothing.Contains(clothingEntry))
+                continue;
+
+            //if (!string.Equals(clothingEntry.SubCategory, subCategory, StringComparison.OrdinalIgnoreCase))
+            //continue;
+
+            clothing.Add(clothingEntry);
+        }
+
+        if (characterClothing[selectedCategory].ContainsKey(selectedSubCategory))
+        {
+            //selectedClothing = characterClothing[selectedCategory][selectedSubCategory];
+        }
+
+
+        /*if (clothing.Count > 0)
+        {
+        SelectClothing(clothing[0]);
+        }
+        else
+        {
+        SelectClothing(null);
+    }*/
+    }
+
+    async void SelectClothing(Clothing clothes)
+    {
+        await Task.FrameEnd();
+        if (characterClothing[selectedCategory][selectedSubCategory] == clothes)
+        {
+            //selectedClothing = null;
+
+            //characterClothing[selectedCategory].Remove(selectedSubCategory);
+            characterClothing[selectedCategory][selectedSubCategory] = null;
+        }
+        else
+        {
+            //selectedClothing = clothes;
+            characterClothing[selectedCategory][selectedSubCategory] = clothes;
+        }
+
+        /*var clothingEntry = new ClothingContainer.ClothingEntry(selectedClothing);
+
+        var clothingContainer = new ClothingContainer();
+        clothingContainer.Clothing.Add(clothingEntry);
+        clothingContainer.Apply(PreviewCharacter.instance.bodyRenderer);*/
+
+        //characterClothing[selectedCategory][selectedSubCategory] = selectedClothing;
+
+        RebuildCharacter();
+    }
+
+    void RebuildCharacter()
+    {
+        PreviewCharacter.instance.bodyRenderer.ClearMaterialOverrides();
+        var clothingContainer = new ClothingContainer();
+        foreach (var catToSubCat in characterClothing)
+        {
+            foreach (var subCatToClothing in catToSubCat.Value)
+            {
+                if (subCatToClothing.Value == null)
+                    continue;
+
+                clothingContainer.Toggle(subCatToClothing.Value);
+                //clothingContainer.Clothing.Add(new ClothingContainer.ClothingEntry(subCatToClothing.Value));
+            }
+        }
+        clothingContainer.Apply(PreviewCharacter.instance.bodyRenderer);
+        FileSystem.Data.WriteAllText("active.json", clothingContainer.Serialize());
+    }
+
+    void Save()
+    {
+        var clothingContainer = new ClothingContainer();
+        foreach (var catToSubCat in characterClothing)
+        {
+            foreach (var subCatToClothing in catToSubCat.Value)
+            {
+                if (subCatToClothing.Value == null)
+                    continue;
+
+                clothingContainer.Toggle(subCatToClothing.Value);
+            }
+        }
+
+        FileSystem.Data.WriteAllText($"{activeFilePath}.json", clothingContainer.Serialize());
+    }
+
+    void Load()
+    {
+        var characterJson = FileSystem.Data.ReadAllText($"{activeFilePath}.json");
+        var clothingContainer = new ClothingContainer();
+        clothingContainer.Deserialize(characterJson);
+
+        foreach (var clothing in clothingContainer.Clothing)
+        {
+            var subCat = GetSubCategory(clothing.Clothing);
+            characterClothing[clothing.Clothing.Category][subCat] = clothing.Clothing;
+        }
+
+        RebuildCharacter();
+    }
+
+    void ButtonBack()
+    {
+        var soundHandle = Sound.Play("ui.navigate.back");
+        soundHandle.TargetMixer = Mixer.FindMixerByName("UI");
+    }
+
+    string GetSubCategory(Clothing clothing)
+    {        
+        string subCat = clothing.SubCategory;
+
+        if (string.IsNullOrEmpty(subCat))
+        {
+            if (clothing.Parent != null)
+            {
+                subCat = clothing.Parent.SubCategory;
+            }
+        }
+        return string.IsNullOrWhiteSpace(subCat) ? "None" : subCat;
+    }
+
+    protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt());
+}

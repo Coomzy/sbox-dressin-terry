@@ -1,0 +1,31 @@
+{
+  "clothingEntries": [
+    {
+      "clothing": "models/citizen_clothes/shorts/boxing_shorts/boxing_shorts_blue.clothing",
+      "tintSelection": 0.5
+    },
+    {
+      "clothing": "models/citizen_clothes/glasses/nerdy_glasses/nerdy_glasses.clothing",
+      "tintSelection": 0.5
+    },
+    {
+      "clothing": "models/citizen_clothes/hair/moustache/moustache.clothing",
+      "tintSelection": 1
+    },
+    {
+      "clothing": "models/citizen_clothes/shoes/slippers/slippers.clothing",
+      "tintSelection": 0.5
+    },
+    {
+      "clothing": "models/citizen_clothes/hair/eyebrows_bushy/eyebrows_bushy.clothing",
+      "tintSelection": 1
+    },
+    {
+      "clothing": "models/citizen_clothes/hair/hair_balding/hair_baldingbrown.clothing",
+      "tintSelection": 1
+    }
+  ],
+  "characterHeight": 2,
+  "__references": [],
+  "__version": 0
+}

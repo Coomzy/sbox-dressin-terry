@@ -1,0 +1,103 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Audio;
+@using Sandbox.Services;
+@using System;
+@using static PreviewCharacter;
+@using static UI_Sounds;
+@inherits PanelComponent
+
+<root>
+    @if (selectedClothing != null)
+    {
+        <div class="container2">
+            <div class="clothing-info">
+                <div class="column">
+                    <div class="label" style="justify-content: center">@selectedClothing.ResourceName</div>
+                    <div class="label">Category: @selectedClothing.Category</div>
+                    <div class="label">Sub Category: @selectedClothing.SubCategory</div>
+                    <div class="label">Parent: @selectedClothing.Parent</div>
+                    <div class="label">Allow Tint: @selectedClothing.AllowTintSelect</div>
+                    @if (selectedClothing.AllowTintSelect)
+                    {
+                        <SliderControl Value=@(clothingTint) OnValueChanged="@(OnTintSliderChange)" Min=@(0) Max=@(1) Step=@(0.01f)></SliderControl>
+                        <label></label>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    <div class="container">
+        <div class="column">
+            @foreach (var clothing in characterClothing)
+            {
+                if (clothing == null)
+                    continue;
+                <img style="background-color: @SelectedColor(clothing);" src="@clothing.Icon.Path" class="clothing-image" onclick="@(() => SelectClothing(clothing))" onmouseover="@Play_OnMouseOver" />
+            }
+        </div>
+    </div>
+</root>
+
+@code
+{
+    [Property] public Clothing selectedClothing { get; set; }
+    [Property, ReadOnly] public float clothingTint
+    {
+        get
+        {
+            if (selectedClothing == null)
+            {
+                return 0.0f;
+            }
+
+            if (clothingToTint.TryGetValue(selectedClothing, out float tintValue))
+            {
+                return tintValue;
+            }
+
+            return selectedClothing.TintDefault;
+        }
+    }
+
+    public string SelectedColor(Clothing clothes)
+    {
+        return clothes == selectedClothing ? "white" : "transparent";
+    }
+
+    void SelectClothing(Clothing clothes)
+    {
+        selectedClothing = clothes;
+        dirty++;
+    }
+
+    void OnTintSliderChange(float value)
+    {
+        clothingToTint[selectedClothing] = value;
+        //Log.Info($"OnTintSliderChange() value: {value}");
+        RebuildCharacter();
+    }
+
+    protected override void OnAwake()
+    {
+        OnBuildCharacter += OnBuildCharacter_Event;
+    }
+
+    void OnBuildCharacter_Event()
+    {
+        CheckSelectedClothingIsStillValid();
+    }
+
+    void CheckSelectedClothingIsStillValid()
+    {
+        if (selectedClothing == null)
+            return;
+
+        if (characterClothing.Contains(selectedClothing))
+            return;
+
+        selectedClothing = null;
+    }
+
+    protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt() + dirty);
+}

@@ -1,0 +1,52 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Audio;
+@using Sandbox.Services;
+@using System;
+@using System.IO;
+@using static PreviewCharacter;
+@using static DressinTerry;
+@inherits PanelComponent
+
+<root>
+    <div class="box-container">
+        <div class="box-header">
+            Save Character
+        </div>
+
+        <div class="box-content">            
+            <TextEntry style="background-color:darkgray; min-width: 250px;" type="text" placeholder="File path goes here..." Value:bind="@activeFilePath"></TextEntry>
+        </div>
+
+        <div class="box-footer">
+            <button class="button-left" onclick="@(() => Close())">Close</button>
+            <button class="button-right" onclick="@(() => Save())">Save</button>
+        </div>
+    </div>
+
+</root>
+
+@code
+{
+    bool IsPathValid()
+    {
+        char[] invalidChars = Path.GetInvalidPathChars();
+        if (activeFilePath.IndexOfAny(invalidChars) >= 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    void Close()
+    {
+        this.Enabled = false;    
+    }
+
+    void Save()
+    {
+        this.Enabled = false;
+    }
+
+    protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt());
+}

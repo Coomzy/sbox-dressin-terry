@@ -1,0 +1,241 @@
+﻿@using Sandbox;
+@using Sandbox.UI;
+@using Sandbox.Audio;
+@using Sandbox.Services;
+@using System;
+@using static PreviewCharacter;
+@using static UI_Sounds;
+@inherits PanelComponent
+
+<root>
+    <div class="container">
+        <div class="column">
+            <div class="row">
+                @foreach (var clothingCategory in clothingCategories)
+                {
+                    <button style="color: @SelectedColor(clothingCategory);" onclick="@(() => Input_SelectCategory(clothingCategory))" onmouseover="@Play_OnMouseOver">@clothingCategory.ToString()</button>
+                }
+            </div>
+            <div class="row">
+                @foreach (var clothingSubCategory in clothingSubCategories)
+                {
+                    var subCat = string.IsNullOrWhiteSpace(clothingSubCategory) ? "None" : clothingSubCategory;
+                    <button style="color: @SelectedColor(clothingSubCategory);" onclick="@(() => SelectSubCategory(clothingSubCategory))" onmouseover="@Play_OnMouseOver">@subCat</button>
+                }
+            </div>
+            <div class="row">
+                @foreach (var clothes in clothing)
+                {
+                    <img style="background-color: @SelectedColor(clothes);" src="@clothes.Icon.Path" class="clothing-image" onclick="@(() => SelectClothing(clothes))" onmouseover="@(() => HoverClothing(clothes))" onmouseout="@(() => UnhoverClothing(clothes))" />
+                }
+            </div>
+            <div class="row" style="width: 65%">
+                <label>Character Height:</label>
+                <SliderControl style="color: white;" Value=@(characterHeight) OnValueChanged="@(OnCharacterHeightChanged)" Min=@(0.5f) Max=@(2.0f) Step=@(0.01f)></SliderControl>
+            </div>
+            @if (incompatibilityList.Count > 0)
+            {
+                <label>@hoverClothes.ResourceName is incompatible with:</label>
+                foreach (var incompatibleItem in incompatibilityList)
+                {
+                    <label>@incompatibleItem?.ResourceName</label>
+                }
+            }
+        </div>
+    </div>
+</root>
+
+@code
+{
+    [Property] public Clothing.ClothingCategory selectedCategory = Clothing.ClothingCategory.Skin;
+    [Property] public string selectedSubCategory = "";
+
+    public List<Clothing> allClothing { get; set; } = new List<Clothing>();
+
+    public List<Clothing.ClothingCategory> clothingCategories { get; set; } = new List<Clothing.ClothingCategory>();
+    public List<string> clothingSubCategories { get; set; } = new List<string>();
+    public List<Clothing> clothing { get; set; } = new List<Clothing>();
+
+    public Clothing hoverClothes { get; set; }
+    public List<Clothing> incompatibilityList { get; set; } = new List<Clothing>();
+
+    public string SelectedColor(Clothing.ClothingCategory clothingCategory)
+    {
+        return clothingCategory == selectedCategory ? "white" : "black";
+    }
+
+    public string SelectedColor(string clothingSubCategory)
+    {
+        return clothingSubCategory == selectedSubCategory ? "white" : "black";
+    }
+
+    public string SelectedColor(Clothing clothes)
+    {
+        if (!IsCompatibleWithCharacterClothing(clothes))
+        {            
+            return "rgba(139, 0, 0, 0.5)";
+        }
+        return characterClothing.Contains(clothes) ? "white" : "transparent";
+    }
+
+    bool IsCompatibleWithCharacterClothing(Clothing clothes)
+    {
+        foreach (var clothing in characterClothing)
+        {
+            if (clothing == clothes)
+                continue;
+
+            if (!clothing.CanBeWornWith(clothes))
+                return false;
+
+        }
+        return true;
+    }
+
+    protected override void OnAwake()
+    {
+        Mouse.Visible = true;
+        allClothing = ResourceLibrary.GetAll<Clothing>().ToList();
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (clothingCategories.Contains(clothingEntry.Category))
+                continue;
+
+            clothingCategories.Add(clothingEntry.Category);
+        }
+
+        SelectCategory(Clothing.ClothingCategory.Skin);
+    }
+
+    void Input_SelectCategory(Clothing.ClothingCategory category)
+    {
+        SelectCategory(category);
+        Play_OnMouseClick();
+    }
+
+    void SelectCategory(Clothing.ClothingCategory category)
+    {
+        selectedCategory = category;
+        clothingSubCategories.Clear();
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (clothingEntry.Category != category)
+                continue;
+
+            string subCat = GetSubCategory(clothingEntry);
+
+            if (clothingSubCategories.Contains(subCat))
+                continue;
+
+            //Log.Info($"Category: {clothingEntry.Category}, subCat: {subCat}, clothing: {clothingEntry.ResourceName}");
+            clothingSubCategories.Add(subCat);
+        }
+
+        if (clothingSubCategories.Count > 0)
+        {
+            SelectSubCategory(clothingSubCategories[0]);
+        }
+        else
+        {
+            SelectSubCategory("");
+        }
+    }
+
+    void Input_SelectSubCategory(string subCategory)
+    {
+        SelectSubCategory(subCategory);
+        Play_OnMouseClick();
+    }
+
+    void SelectSubCategory(string subCategory)
+    {
+        selectedSubCategory = subCategory;
+        clothing.Clear();
+
+        foreach (var clothingEntry in allClothing)
+        {
+            if (clothingEntry.Category != selectedCategory)
+                continue;
+
+            string subCat = GetSubCategory(clothingEntry);
+            if (subCat != selectedSubCategory)
+                continue;
+
+            if (clothing.Contains(clothingEntry))
+                continue;
+
+            clothing.Add(clothingEntry);
+        }
+        dirty++;
+    }
+
+
+    void Input_SelectClothing(Clothing clothes)
+    {
+        SelectClothing(clothes);
+        Play_OnMouseClick();
+    }
+
+    async void SelectClothing(Clothing clothes)
+    {
+        incompatibilityList.Clear();
+
+        await Task.FrameEnd();
+
+        var clothingContainer = GetPreviewClothingContainer();
+
+        clothingContainer.Toggle(clothes);
+
+        characterClothing.Clear();
+        foreach (var clothingEntry in clothingContainer.Clothing)
+        {
+            var clothing = clothingEntry.Clothing;
+            if (!characterClothing.Contains(clothing))
+            {
+                characterClothing.Add(clothing);
+            }
+        }
+
+        RebuildCharacter();
+        dirty++;
+    }
+
+    void HoverClothing(Clothing clothes)
+    {
+        hoverClothes = clothes;
+        incompatibilityList.Clear();
+        foreach (var clothing in characterClothing)
+        {
+            if (clothing == clothes)
+                continue;
+
+            if (clothing.CanBeWornWith(clothes))
+                continue;
+
+            incompatibilityList.Add(clothing);
+
+        }
+        dirty++;
+        Play_OnMouseOver();
+    }
+
+    void UnhoverClothing(Clothing clothes)
+    {
+        if (hoverClothes == clothes)
+        {
+            hoverClothes = null;
+            incompatibilityList.Clear();            
+        }
+        dirty++;
+    }
+
+    void OnCharacterHeightChanged(float value)
+    {
+        characterHeight = value;
+        RebuildCharacter();
+    }
+
+    protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt() + dirty);
+}
