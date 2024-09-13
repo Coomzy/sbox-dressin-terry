@@ -15,11 +15,20 @@ public class TerryDresser : Component
 {
 	[Group("Setup"), Order(-1), Property] public SkinnedModelRenderer bodyRenderer { get; set; }
 
-	[Group("Config"), Property] public DresserType dresserType { get; set; }
+	[Group("Config"), Property] public bool applyOnAwake { get; set; }
+	[Group("Config"), Property, Change(nameof(Change_dresserType))] public DresserType dresserType { get; set; }
 	[Group("Config"), Property, ShowIf("dresserType", DresserType.Character), Change(nameof(Change_character)), InlineEditor] public DressinTerryCharacter character { get; set; }
 	[Group("Config"), Property, ShowIf("dresserType", DresserType.Rule), Change(nameof(Change_rule)), InlineEditor] public DressinTerryRule rule { get; set; }
 
 	ClothingContainer lastClothingContainer { get; set; }
+
+	protected override void OnAwake()
+	{
+		if (!applyOnAwake)
+			return;
+
+		Apply();
+	}
 
 	[Group("Apply"), Order(10), Button]
 	public void Apply()
@@ -38,13 +47,17 @@ public class TerryDresser : Component
 		}
 	}
 
+	void Change_dresserType(DresserType oldValue, DresserType newValue)
+	{
+		Apply();
+	}
+
 	void Change_character(DressinTerryCharacter oldValue, DressinTerryCharacter newValue)
 	{
-		// HACK: Waiting for this to be fixed https://github.com/Facepunch/sbox-issues/issues/6406
 		if (dresserType != DresserType.Character)
 			return;
 
-		//Apply_Character();
+		Apply_Character();
 	}
 
 	public void Apply_Character()
@@ -61,11 +74,10 @@ public class TerryDresser : Component
 
 	void Change_rule(DressinTerryRule oldValue, DressinTerryRule newValue)
 	{
-		// HACK: Waiting for this to be fixed https://github.com/Facepunch/sbox-issues/issues/6406
 		if (dresserType != DresserType.Rule)
 			return;
 
-		//Apply_Rule();
+		Apply_Rule();
 	}
 
 	public void Apply_Rule()
@@ -90,6 +102,17 @@ public class TerryDresser : Component
 		lastClothingContainer = DressinTerry.RandomCharacter();
 		//bodyRenderer.ApplyClothing(lastClothingContainer);
 		DressinTerry.ApplyClothing(bodyRenderer, lastClothingContainer);
+	}
+
+	[Group("Creation"), Order(80), Button, ShowIf("dresserType", DresserType.Rule)]
+	public void CreateLastUsedClothingContainer()
+	{
+		if (lastClothingContainer == null)
+		{
+			Log.Warning($"lastClothingContainer is null, it doesn't serialize so if you switch scene or something it's gone!");
+			return;
+		}
+		DressinTerry.RequestCharacterCreation(lastClothingContainer, rule?.ResourceName);
 	}
 
 	[Group("Debug"), Order(100), Button]

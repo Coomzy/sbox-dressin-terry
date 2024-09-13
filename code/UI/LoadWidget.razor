@@ -57,7 +57,11 @@
     {
         Log.Info($"file '{file}' selected!");
         Load(file);
+
+        activeFilePath = file;
+
         Close(false);
+
         var soundHandle = Sound.Play("ui.button.press");
         soundHandle.TargetMixer = Mixer.FindMixerByName("UI");
     }

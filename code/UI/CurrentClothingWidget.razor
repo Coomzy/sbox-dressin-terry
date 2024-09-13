@@ -7,7 +7,7 @@
 @using static UI_Sounds;
 @inherits PanelComponent
 
-<root>
+<root onclick="@(() => SaveManagementWidget.BlurTextEntry())">
     @if (selectedClothing != null)
     {
         <div class="container2">
@@ -71,6 +71,7 @@
         dirty++;
 
         Play_OnMouseClick();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     void OnTintSliderChange(float value)
@@ -78,6 +79,7 @@
         clothingToTint[selectedClothing] = value;
         //Log.Info($"OnTintSliderChange() value: {value}");
         RebuildCharacter();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     protected override void OnAwake()

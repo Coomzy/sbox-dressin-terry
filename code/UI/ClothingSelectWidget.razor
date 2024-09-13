@@ -7,7 +7,7 @@
 @using static UI_Sounds;
 @inherits PanelComponent
 
-<root>
+<root onclick="@(() => SaveManagementWidget.BlurTextEntry())">
     <div class="container">
         <div class="column">
             <div class="row">
@@ -29,9 +29,9 @@
                     <img style="background-color: @SelectedColor(clothes);" src="@clothes.Icon.Path" class="clothing-image" onclick="@(() => SelectClothing(clothes))" onmouseover="@(() => HoverClothing(clothes))" onmouseout="@(() => UnhoverClothing(clothes))" />
                 }
             </div>
-            <div class="row" style="width: 65%">
+            <div class="row" style="width: 65%;">
                 <label>Character Height:</label>
-                <SliderControl style="color: white;" Value=@(characterHeight) OnValueChanged="@(OnCharacterHeightChanged)" Min=@(0.5f) Max=@(2.0f) Step=@(0.01f)></SliderControl>
+                <SliderControl style="color: white;  align-self: center" Value=@(characterHeight) OnValueChanged="@(OnCharacterHeightChanged)" Min=@(0.5f) Max=@(2.0f) Step=@(0.01f)></SliderControl>
             </div>
             @if (incompatibilityList.Count > 0)
             {
@@ -112,6 +112,7 @@
     {
         SelectCategory(category);
         Play_OnMouseClick();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     void SelectCategory(Clothing.ClothingCategory category)
@@ -147,6 +148,7 @@
     {
         SelectSubCategory(subCategory);
         Play_OnMouseClick();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     void SelectSubCategory(string subCategory)
@@ -193,6 +195,7 @@
         dirty++;
 
         Play_OnMouseClick();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     void HoverClothing(Clothing clothes)
@@ -212,6 +215,7 @@
         }
         dirty++;
         Play_OnMouseOver();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     void UnhoverClothing(Clothing clothes)
@@ -228,6 +232,7 @@
     {
         characterHeight = value;
         RebuildCharacter();
+        SaveManagementWidget.BlurTextEntry();
     }
 
     protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt() + dirty);

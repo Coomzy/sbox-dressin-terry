@@ -1,35 +1,41 @@
 {
-  "characterHeightOverride": null,
+  "characterHeightOverride": 1,
   "characterHeightRandomRange": "0.8,1.2",
   "clothingGlobalWhiteList": [],
-  "clothingGlobalBlacklist": [
-    "models/citizen/skin/citizen_skin_zombie_02.clothing"
-  ],
+  "clothingGlobalBlacklist": [],
+  "categoriesGlobalWhiteList": [],
+  "categoriesGlobalBlacklist": [],
+  "subCategoriesGlobalWhiteList": [],
+  "subCategoriesGlobalBlacklist": [],
   "rules": [
     {
       "clothingRuleType": "FromListOnly",
       "clothing": [
-        "models/citizen/skin/citizen_skin_zombie_01.clothing",
-        "models/citizen/skin/citizen_skin_zombie_02.clothing"
+        "models/citizen_clothes/hat/police_hat/police_hat.clothing"
       ],
-      "categories": [
-        "Hat",
-        "None"
+      "categories": [],
+      "subCategories": [],
+      "shouldShowClothing": true
+    },
+    {
+      "clothingRuleType": "FromListOnly",
+      "clothing": [
+        "models/citizen_clothes/vest/tactical_vest/models/tactical_vest.clothing"
       ],
+      "categories": [],
       "subCategories": [],
       "shouldShowClothing": true
     },
     {
       "clothingRuleType": "Blacklist",
       "clothing": [
-        "models/citizen_clothes/hat/bucket_hat/bucket_hat.clothing"
+        "models/citizen_clothes/shirt/chainmail/chainmail.clothing"
       ],
       "categoriesRuleType": "FromListOnly",
       "categories": [
-        "Hat"
+        "Tops"
       ],
       "subCategories": [],
-      "chanceOf": 0.75,
       "shouldShowClothing": true,
       "shouldShowCategories": true,
       "shouldShowCategoriesList": true,
@@ -53,26 +59,9 @@
         "Footwear"
       ],
       "subCategories": [],
-      "chanceOf": 0.9,
       "shouldShowCategories": true,
       "shouldShowCategoriesList": true,
       "shouldShowSubCategories": true
-    },
-    {
-      "clothing": [],
-      "categoriesRuleType": "FromListOnly",
-      "categories": [
-        "Tops"
-      ],
-      "subCategoriesRuleType": "Blacklist",
-      "subCategories": [
-        "Full Outfits"
-      ],
-      "chanceOf": 0.8,
-      "shouldShowCategories": true,
-      "shouldShowCategoriesList": true,
-      "shouldShowSubCategories": true,
-      "shouldShowSubCategoriesList": true
     }
   ],
   "__references": [],

@@ -5,7 +5,7 @@
   "Ident": "dressin_terry",
   "Schema": 1,
   "IncludeSourceFiles": true,
-  "Resources": null,
+  "Resources": "textures/*\n!dressin_terry/*",
   "PackageReferences": [],
   "EditorReferences": null,
   "IsWhitelistDisabled": false,

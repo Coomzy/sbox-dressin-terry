@@ -1,0 +1,19 @@
+{
+  "clothingEntries": [
+    {
+      "clothing": "models/citizen/skin/citizen_skin_zombie_02.clothing",
+      "tintSelection": 0.81732535
+    },
+    {
+      "clothing": "models/citizen_clothes/shorts/boxing_shorts/boxing_shorts_red.clothing",
+      "tintSelection": 0.5588848
+    },
+    {
+      "clothing": "models/citizen_clothes/jacket/office_blazer/office_blazer.clothing",
+      "tintSelection": 0.2919063
+    }
+  ],
+  "characterHeight": 0.9869259,
+  "__references": [],
+  "__version": 0
+}

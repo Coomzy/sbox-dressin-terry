@@ -43,6 +43,13 @@ ClothingSelectWidget {
 		flex-direction: row;
 		margin-bottom: 10px;
 		flex-wrap: wrap;
+		align-items: center;
+		align-content: center;
+	}
+
+	.slidercontrol {
+		align-items: center;
+		padding: 5px 0px 0px 0px;
 	}
 
 	button {

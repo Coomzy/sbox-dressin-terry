@@ -9,10 +9,27 @@ public static class DressinTerry
 {
 	public const string extension = "chr";
 
+	public static event Action<ClothingContainer, string> OnRequestCreateCharacter;
+
 	public static List<Clothing> allClothing = new List<Clothing>();
 	public static List<Clothing.ClothingCategory> clothingCategories = new List<Clothing.ClothingCategory>();
 	public static List<string> clothingSubCategories = new List<string>();
 	public static Dictionary<Clothing.ClothingCategory, List<string>> clothingCategoryToSubCategory = new Dictionary<Clothing.ClothingCategory, List<string>>();
+
+	public static void RegisterOnRequestCreateCharacter(Action<ClothingContainer, string> handler)
+	{
+		if (OnRequestCreateCharacter != null && OnRequestCreateCharacter.GetInvocationList().Contains(handler))
+		{
+			return;
+		}
+
+		OnRequestCreateCharacter += handler;
+	}
+
+	public static void RequestCharacterCreation(ClothingContainer container, string relativeFilePath = null)
+	{
+		OnRequestCreateCharacter?.Invoke(container, relativeFilePath);
+	}
 
 	public static ClothingContainer RandomCharacter()
 	{
@@ -39,13 +56,23 @@ public static class DressinTerry
 		return clothingContainer;
 	}
 
-	public static Clothing RandomClothing(Clothing.ClothingCategory? category = null, string subCategory = null, List<Clothing> wearingClothing = null)
+	public static Clothing RandomClothing(Clothing.ClothingCategory? category = null, string subCategory = null, List<Clothing> currentClothing = null, List<Clothing> whitelistedClothing = null, List<Clothing> blacklistedClothing = null)
 	{
 		IEnumerable<Clothing> clothing = allClothing.ToList();
 
-		if (wearingClothing != null && wearingClothing.Any())
+		if (blacklistedClothing != null && blacklistedClothing.Any())
 		{
-			clothing = clothing.Where(x => !wearingClothing.Contains(x) && wearingClothing.All(y => y.CanBeWornWith(x)));
+			clothing = clothing.Where(x => !blacklistedClothing.Contains(x));
+		}
+
+		if (whitelistedClothing != null && whitelistedClothing.Any())
+		{
+			clothing = clothing.Where(x => whitelistedClothing.Contains(x));
+		}
+
+		if (currentClothing != null && currentClothing.Any())
+		{
+			clothing = clothing.Where(x => !currentClothing.Contains(x) && currentClothing.All(y => y.CanBeWornWith(x)));
 		}
 
 		if (category.HasValue)
@@ -62,7 +89,6 @@ public static class DressinTerry
 		{
 			return null;
 		}
-
 		var rndIndex = Game.Random.Int(0, clothing.Count()-1);
 		return clothing.ElementAt(rndIndex);
 	}
@@ -94,7 +120,7 @@ public static class DressinTerry
 
 			Game.ActiveScene = activeScene;
 
-			if (bodyRenderer.Scene != null)
+			if (bodyRenderer.Scene?.Editor != null)
 			{
 				bodyRenderer.Scene.Editor.HasUnsavedChanges = true;
 			}

@@ -16,7 +16,7 @@ SaveManagementWidget {
 		justify-content: flex-start;
 		align-items: flex-start;
 		padding: 20px;
-		height: 100vh;
+		//height: 100vh;
 		position: relative;
 		flex-direction: column-reverse;
 	}
@@ -42,6 +42,12 @@ SaveManagementWidget {
 
 	.save-filepath-entry {
 		height: 60%;
+	}
+
+	.textentry .content-label {
+		height: 80%;
+		align-items: center;
+		font-size: 25;
 	}
 
 	.save-image {

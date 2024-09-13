@@ -32,13 +32,18 @@ public class PreviewCharacter : Component
 
 		Load(activeFilePath);
 
-		thirdPersonAnimationHelper.Target.Set("special_idle_states", 1);
+		FlipIdleMenuState();
 	}
 
 	protected override void OnUpdate()
 	{
 		CameraMovement();
 		RotateCharacter();
+
+		if (Input.Pressed("reload"))
+		{
+			FlipIdleMenuState();
+		}
 	}
 
 	void CameraMovement()
@@ -72,6 +77,11 @@ public class PreviewCharacter : Component
 		var angles = GameObject.Transform.Rotation.Angles();
 		angles.yaw += rotateAmount * Time.Delta * rotateSpeed;
 		GameObject.Transform.Rotation = angles.ToRotation();
+	}
+
+	void FlipIdleMenuState()
+	{
+		thirdPersonAnimationHelper.Target.Set("special_idle_states", 1 - thirdPersonAnimationHelper.Target.GetInt("special_idle_states"));
 	}
 
 	public static void RebuildCharacter()

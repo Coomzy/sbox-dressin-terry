@@ -92,7 +92,6 @@
       "Flags": 0,
       "Name": "Camera",
       "Position": "-182.3426,0.00001525906,46.62676",
-      "Enabled": true,
       "Components": [
         {
           "__type": "Sandbox.CameraComponent",
@@ -169,13 +168,14 @@
         {
           "__type": "TerryDresser",
           "__guid": "47ef37b1-d838-4e94-8141-319f817c1f29",
+          "applyOnAwake": false,
           "bodyRenderer": {
             "_type": "component",
             "component_id": "d40bdbdb-1ef6-40eb-9656-67e10a651546",
             "go": "7dc81352-4d2f-4b4f-aa45-db2873fb432c",
             "component_type": "SkinnedModelRenderer"
           },
-          "character": "dressin_terry/characters/boxer/king.chr",
+          "character": "dressin_terry/characters/skeleton/king.chr",
           "dresserType": "Rule",
           "rule": "rules/zombie.rule"
         }
@@ -211,7 +211,7 @@
               "BodyWeight": 1,
               "EyesWeight": 1,
               "HeadWeight": 1,
-              "Height": 0.8075839,
+              "Height": 0.9790391,
               "LookAtEnabled": false,
               "Target": {
                 "_type": "component",
@@ -1054,15 +1054,15 @@
               ]
             },
             {
-              "__guid": "fb7f81f6-b5c4-411c-b042-362794834d0b",
+              "__guid": "0f45089a-5873-47c4-ba62-25749338681c",
               "Flags": 0,
-              "Name": "Clothing - citizen_skin_zombie_02",
+              "Name": "Clothing - citizen_skin_zombie_01",
               "Tags": "clothing",
               "Enabled": true,
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "1f8c757b-64b0-4a1a-aa2f-bb773c2aad0c",
+                  "__guid": "170e9881-277e-4582-a771-320241f41337",
                   "BodyGroups": 18446744073709551615,
                   "BoneMergeTarget": {
                     "_type": "component",
@@ -1072,7 +1072,7 @@
                   },
                   "CreateBoneObjects": false,
                   "MaterialGroup": "Skin_Zombie",
-                  "Model": "models/citizen/heads/head_zombie_02/models/head_zombie_02.vmdl",
+                  "Model": "models/citizen/heads/head_zombie_01/models/head_zombie_01.vmdl",
                   "Morphs": {},
                   "RenderOptions": {
                     "GameLayer": true,
@@ -1087,15 +1087,15 @@
               ]
             },
             {
-              "__guid": "140c7775-452f-45c6-b3e7-a6decd734ba0",
+              "__guid": "4a8891b2-897e-4871-8050-aa08a2952521",
               "Flags": 0,
-              "Name": "Clothing - baseball_cap_black",
+              "Name": "Clothing - fedora",
               "Tags": "clothing",
               "Enabled": true,
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "ac89ad4d-7d53-4156-a906-817e41b90155",
+                  "__guid": "85ea4d56-b6e1-4613-8d73-4c8f7062a670",
                   "BodyGroups": 18446744073709551615,
                   "BoneMergeTarget": {
                     "_type": "component",
@@ -1104,7 +1104,7 @@
                     "component_type": "SkinnedModelRenderer"
                   },
                   "CreateBoneObjects": false,
-                  "Model": "models/citizen_clothes/hat/baseball_cap/model/baseball_cap_black.vmdl",
+                  "Model": "models/citizen_clothes/hat/fedora/models/fedora.vmdl",
                   "Morphs": {},
                   "RenderOptions": {
                     "GameLayer": true,
@@ -1119,15 +1119,15 @@
               ]
             },
             {
-              "__guid": "c21a7348-e40e-4ff6-901a-57846dc52042",
+              "__guid": "b602c292-b434-4570-9e5d-0db42e885f3c",
               "Flags": 0,
-              "Name": "Clothing - jeans",
+              "Name": "Clothing - trackie_bottoms",
               "Tags": "clothing",
               "Enabled": true,
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "4e193a2a-6cc9-46af-a29a-7d26748f6709",
+                  "__guid": "8e97175d-b812-42ba-97e9-f9a56f01b231",
                   "BodyGroups": 18446744073709551615,
                   "BoneMergeTarget": {
                     "_type": "component",
@@ -1136,7 +1136,7 @@
                     "component_type": "SkinnedModelRenderer"
                   },
                   "CreateBoneObjects": false,
-                  "Model": "models/citizen_clothes/jacket/longsleeve/models/jeans.vmdl",
+                  "Model": "models/citizen_clothes/trousers/trackiebottoms/models/trackie_bottoms.vmdl",
                   "Morphs": {},
                   "RenderOptions": {
                     "GameLayer": true,
@@ -1151,15 +1151,15 @@
               ]
             },
             {
-              "__guid": "7c92b601-f58b-4117-b36c-d6b8f760421e",
+              "__guid": "d67b71ae-d780-486f-b5a1-49094189a2bb",
               "Flags": 0,
-              "Name": "Clothing - clogs_and_socks",
+              "Name": "Clothing - trainers",
               "Tags": "clothing",
               "Enabled": true,
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "6ab45e37-b0c6-4b83-94b9-671d7704df74",
+                  "__guid": "4044fd3e-eaaa-4811-a562-bc2de8f0b05b",
                   "BodyGroups": 18446744073709551615,
                   "BoneMergeTarget": {
                     "_type": "component",
@@ -1168,39 +1168,7 @@
                     "component_type": "SkinnedModelRenderer"
                   },
                   "CreateBoneObjects": false,
-                  "Model": "models/citizen_clothes/shoes/crocs_and_socks/models/clogs_and_socks.vmdl",
-                  "Morphs": {},
-                  "RenderOptions": {
-                    "GameLayer": true,
-                    "OverlayLayer": false,
-                    "BloomLayer": false,
-                    "AfterUILayer": false
-                  },
-                  "RenderType": "On",
-                  "Tint": "1,1,1,1",
-                  "UseAnimGraph": true
-                }
-              ]
-            },
-            {
-              "__guid": "f0fba51a-7eb5-40e8-9134-fec429f95368",
-              "Flags": 0,
-              "Name": "Clothing - hivis_jacket",
-              "Tags": "clothing",
-              "Enabled": true,
-              "Components": [
-                {
-                  "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "a86fbbab-6cba-4d3c-8204-3864d9058af2",
-                  "BodyGroups": 18446744073709551615,
-                  "BoneMergeTarget": {
-                    "_type": "component",
-                    "component_id": "d40bdbdb-1ef6-40eb-9656-67e10a651546",
-                    "go": "7dc81352-4d2f-4b4f-aa45-db2873fb432c",
-                    "component_type": "SkinnedModelRenderer"
-                  },
-                  "CreateBoneObjects": false,
-                  "Model": "models/citizen_clothes/jacket/hivis_jacket/models/hivis_jacket.vmdl",
+                  "Model": "models/citizen_clothes/shoes/trainers/trainers.vmdl",
                   "Morphs": {},
                   "RenderOptions": {
                     "GameLayer": true,

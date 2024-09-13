@@ -20,7 +20,7 @@
 
 @code
 {
-    protected TextEntry textEntry;
+    public static TextEntry textEntry { get; set; }
 
     void OpenSavePanel()
     {
@@ -31,6 +31,7 @@
         //saveWidget.Enabled = true;
 
         Play_OnMouseClick();
+        BlurTextEntry();
     }
 
     void OpenLoadPanel()
@@ -39,11 +40,20 @@
         loadWidget.Enabled = true;
 
         Play_OnMouseClick();
+        BlurTextEntry();
     }
 
     protected override void OnUpdate()
     {
         if (!Input.Down("attack1"))
+            return;
+
+        BlurTextEntry();
+    }
+
+    public static void BlurTextEntry()
+    {
+        if (textEntry == null)
             return;
 
         textEntry.Blur();

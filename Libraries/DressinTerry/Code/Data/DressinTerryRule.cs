@@ -11,8 +11,14 @@ public class DressinTerryRule : GameResource
 	[Group("Height"), Order(1), Property, Range(0.5f, 2.0f)] public float? characterHeightOverride { get; set; } = 1.0f;
 	[Group("Height"), Order(1), Property, Range(0.5f, 2.0f)] public Vector2 characterHeightRandomRange { get; set; } = new Vector2(0.8f, 1.2f);
 
-	[Group("Clothing"), Order(2), Property] public List<Clothing> clothingWhiteList { get; set; } = new List<Clothing>();
-	[Group("Clothing"), Order(2), Property] public List<Clothing> clothingBlacklsit { get; set; } = new List<Clothing>();
+	[Group("Global Filters"), Order(2), Property] public List<Clothing> clothingGlobalWhiteList { get; set; } = new List<Clothing>();
+	[Group("Global Filters"), Order(2), Property] public List<Clothing> clothingGlobalBlacklist { get; set; } = new List<Clothing>();
+
+	[Group("Global Filters"), Order(2), Property] public List<Clothing.ClothingCategory> categoriesGlobalWhiteList { get; set; } = new List<Clothing.ClothingCategory>();
+	[Group("Global Filters"), Order(2), Property] public List<Clothing.ClothingCategory> categoriesGlobalBlacklist { get; set; } = new List<Clothing.ClothingCategory>();
+
+	[Group("Global Filters"), Order(2), Property] public List<string> subCategoriesGlobalWhiteList { get; set; } = new List<string>();
+	[Group("Global Filters"), Order(2), Property] public List<string> subCategoriesGlobalBlacklist { get; set; } = new List<string>();
 
 	[Group("Rules"), Order(3), Property, InlineEditor] public List<RuleInst> rules { get; set; } = new List<RuleInst>();
 
@@ -21,10 +27,9 @@ public class DressinTerryRule : GameResource
 		var clothingContainer = new ClothingContainer();
 		if (rule != null)
 		{
-			var rulesReversed = rule.rules.ToList();
-			//rulesReversed.Reverse();
-			List<Clothing> wearingClothing = new List<Clothing>();
-			foreach (var ruleInst in rulesReversed)
+			var allRules = rule.rules.ToList();
+			List<Clothing> currentClothing = new List<Clothing>();
+			foreach (var ruleInst in allRules)
 			{
 				if (ruleInst.chanceOf != null)
 				{
@@ -34,8 +39,8 @@ public class DressinTerryRule : GameResource
 						continue;
 				}
 
-				var entry = ruleInst.GetRandomEntry(wearingClothing);
-				if (entry == null)
+				var entry = ruleInst.GetRandomEntry(rule, currentClothing);
+				if (entry?.Clothing == null)
 				{
 					continue;
 				}
@@ -48,7 +53,7 @@ public class DressinTerryRule : GameResource
 					entryInst.Tint = entry.Tint;
 				}
 
-				wearingClothing.Add(entry.Clothing);
+				currentClothing.Add(entry.Clothing);
 			}
 			clothingContainer.Height = rule.characterHeightOverride != null ? rule.characterHeightOverride.Value : Game.Random.Float(rule.characterHeightRandomRange.x, rule.characterHeightRandomRange.y);
 		}
@@ -94,12 +99,24 @@ public class RuleInst
 	[Hide] public bool shouldShowSubCategories => clothingRuleType != DressingTerryRuleType.FromListOnly;
 	[Hide] public bool shouldShowSubCategoriesList => shouldShowCategories && subCategoriesRuleType != DressingTerryRuleType.Any;
 
-	public ClothingContainer.ClothingEntry GetRandomEntry(List<Clothing> wearingClothing = null)
+	public ClothingContainer.ClothingEntry GetRandomEntry(DressinTerryRule rule, List<Clothing> currentClothing = null)
 	{
-		var invalidClothing = new List<Clothing>(wearingClothing);
+		var whitelistedClothing =  new List<Clothing>(rule.clothingGlobalWhiteList);
+		var blacklistedClothing =  new List<Clothing>(rule.clothingGlobalBlacklist);
+
 		if (clothingRuleType == DressingTerryRuleType.FromListOnly)
 		{
-			var clothingFromList = clothing.ToList().Where(x => !invalidClothing.Contains(x));
+			whitelistedClothing.AddRange(clothing);
+		}
+		else if (clothingRuleType == DressingTerryRuleType.Blacklist)
+		{
+			blacklistedClothing.AddRange(clothing);
+		}
+
+		if (clothingRuleType == DressingTerryRuleType.FromListOnly)
+		{
+			var clothingFromList = clothing.ToList().Where(x => !blacklistedClothing.Contains(x) && 
+																(whitelistedClothing.Count == 0 || whitelistedClothing.Contains(x)));
 			if (clothingFromList.Any())
 			{
 				var entry = new ClothingContainer.ClothingEntry(RandomInList(clothingFromList));
@@ -157,18 +174,16 @@ public class RuleInst
 		{
 			if (clothingCategoryToSubCategory.ContainsKey(category))
 			{
-				var list = clothingCategoryToSubCategory[category];
-
-				if (list.Any())
+				if (clothingCategoryToSubCategory[category].Any())
 				{
-					var subCategoriesTypes = list.ToList().Where(x => !subCategory.Contains(x));
+					var subCategoriesTypes = clothingCategoryToSubCategory[category].ToList().Where(x => !subCategories.Contains(x));
 					subCategory = RandomInList(subCategoriesTypes);
 				}
 
 			}
 		}
 
-		var clothingEntry = new ClothingContainer.ClothingEntry(RandomClothing(category, subCategory, invalidClothing));
+		var clothingEntry = new ClothingContainer.ClothingEntry(RandomClothing(category, subCategory, currentClothing, whitelistedClothing, blacklistedClothing));
 		clothingEntry.Tint = tintOverride != null ? tintOverride.Value : Game.Random.Float();
 
 		return clothingEntry;

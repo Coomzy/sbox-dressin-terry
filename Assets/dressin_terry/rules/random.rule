@@ -1,9 +1,41 @@
 {
   "characterHeightOverride": null,
   "characterHeightRandomRange": "0.8,1.2",
-  "clothingWhiteList": [],
-  "clothingBlacklsit": [],
+  "clothingGlobalWhiteList": [],
+  "clothingGlobalBlacklist": [],
+  "categoriesGlobalWhiteList": [],
+  "categoriesGlobalBlacklist": [],
+  "subCategoriesGlobalWhiteList": [],
+  "subCategoriesGlobalBlacklist": [],
   "rules": [
+    {
+      "clothing": [],
+      "categories": [],
+      "subCategories": [],
+      "shouldShowCategories": true,
+      "shouldShowSubCategories": true
+    },
+    {
+      "clothing": [],
+      "categories": [],
+      "subCategories": [],
+      "shouldShowCategories": true,
+      "shouldShowSubCategories": true
+    },
+    {
+      "clothing": [],
+      "categories": [],
+      "subCategories": [],
+      "shouldShowCategories": true,
+      "shouldShowSubCategories": true
+    },
+    {
+      "clothing": [],
+      "categories": [],
+      "subCategories": [],
+      "shouldShowCategories": true,
+      "shouldShowSubCategories": true
+    },
     {
       "clothing": [],
       "categories": [],
