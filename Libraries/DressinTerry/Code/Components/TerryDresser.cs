@@ -2,7 +2,6 @@ using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Sandbox.ClothingContainer;
 
 public enum DresserType
 {
@@ -56,7 +55,8 @@ public class TerryDresser : Component
 			return;
 		}
 		lastClothingContainer = DressinTerryCharacter.ToClothingContainer(character);
-		bodyRenderer.ApplyClothing(lastClothingContainer);
+		//bodyRenderer.ApplyClothing(lastClothingContainer);
+		DressinTerry.ApplyClothing(bodyRenderer, lastClothingContainer);
 	}
 
 	void Change_rule(DressinTerryRule oldValue, DressinTerryRule newValue)
@@ -76,7 +76,8 @@ public class TerryDresser : Component
 			return;
 		}
 		lastClothingContainer = DressinTerryRule.ToClothingContainer(rule);
-		bodyRenderer.ApplyClothing(lastClothingContainer);
+		//bodyRenderer.ApplyClothing(lastClothingContainer);
+		DressinTerry.ApplyClothing(bodyRenderer, lastClothingContainer);
 	}
 
 	public void Apply_Random()
@@ -87,7 +88,8 @@ public class TerryDresser : Component
 			return;
 		}
 		lastClothingContainer = DressinTerry.RandomCharacter();
-		bodyRenderer.ApplyClothing(lastClothingContainer);
+		//bodyRenderer.ApplyClothing(lastClothingContainer);
+		DressinTerry.ApplyClothing(bodyRenderer, lastClothingContainer);
 	}
 
 	[Group("Debug"), Order(100), Button]

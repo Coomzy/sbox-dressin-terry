@@ -1,6 +1,7 @@
 
 using Sandbox;
 using Sandbox.Citizen;
+using Sandbox.UI;
 using System.IO;
 using static DressinTerry;
 
@@ -30,11 +31,8 @@ public class PreviewCharacter : Component
 		base.OnAwake();
 
 		Load(activeFilePath);
-		//LoadClothing();
 
-		thirdPersonAnimationHelper.MoveStyle = CitizenAnimationHelper.MoveStyles.Walk;
-		//thirdPersonAnimationHelper.HoldType = CitizenAnimationHelper.HoldTypes.Pistol;
-		//thirdPersonAnimationHelper.Handedness = CitizenAnimationHelper.Hand.Right;
+		thirdPersonAnimationHelper.Target.Set("special_idle_states", 1);
 	}
 
 	protected override void OnUpdate()
@@ -49,7 +47,7 @@ public class PreviewCharacter : Component
 		forwardMovement += Input.Down("Jump") ? 1.0f : 0.0f;
 		forwardMovement -= Input.Down("Duck") ? 1.0f : 0.0f;
 
-		float movementSpeed = Input.Down("Run") ? 125.0f : 50.0f;		
+		float movementSpeed = Input.Down("Run") ? 125.0f : 50.0f;
 
 		Vector3 camPos = camera.Transform.Position;
 		camPos.x += forwardMovement * Time.Delta * movementSpeed;
@@ -123,7 +121,6 @@ public class PreviewCharacter : Component
 
 	public static void Save(string filePath)
 	{
-		//filePath = $"characters/{filePath}";
 		filePath = $"characters/{filePath}.{extension}";
 		var folder = System.IO.Path.GetDirectoryName(filePath);
 		Log.Info($"Save() filePath: {filePath}, folder: {folder}");

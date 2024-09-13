@@ -62,11 +62,12 @@ public class DressinTerryRule : GameResource
 			Log.Error($"Tried to apply rule '{this}' to a null bodyRenderer!");
 			return;
 		}
-		bodyRenderer.ApplyClothing(ToClothingContainer(this));
+		//bodyRenderer.ApplyClothing(ToClothingContainer(this));
+		DressinTerry.ApplyClothing(bodyRenderer, ToClothingContainer(this));
 	}
 }
 
-public enum RuleType
+public enum DressingTerryRuleType
 {
 	Any,
 	FromListOnly,
@@ -75,28 +76,28 @@ public enum RuleType
 
 public class RuleInst
 {
-	[Group(/*"Clothing"*/"Rule"), Order(1), Property] public RuleType clothingRuleType { get; set; }
+	[Group(/*"Clothing"*/"Rule"), Order(1), Property] public DressingTerryRuleType clothingRuleType { get; set; }
 	[Group(/*"Clothing"*/"Rule"), Order(2), Property, ShowIf(nameof(shouldShowClothing), true)] public List<Clothing> clothing { get; set; } = new List<Clothing>();
 
-	[Group(/*"Category"*/"Rule"), Order(3), Property, ShowIf(nameof(shouldShowCategories), true)] public RuleType categoriesRuleType { get; set; }
+	[Group(/*"Category"*/"Rule"), Order(3), Property, ShowIf(nameof(shouldShowCategories), true)] public DressingTerryRuleType categoriesRuleType { get; set; }
 	[Group(/*"Category"*/"Rule"), Order(4), Property, ShowIf(nameof(shouldShowCategoriesList), true)] public List<Clothing.ClothingCategory> categories { get; set; } = new List<Clothing.ClothingCategory>();
 
-	[Group(/*"Sub Category"*/"Rule"), Order(5), Property, ShowIf(nameof(shouldShowSubCategories), true)] public RuleType subCategoriesRuleType { get; set; }
+	[Group(/*"Sub Category"*/"Rule"), Order(5), Property, ShowIf(nameof(shouldShowSubCategories), true)] public DressingTerryRuleType subCategoriesRuleType { get; set; }
 	[Group(/*"Sub Category"*/"Rule"), Order(6), Property, ShowIf(nameof(shouldShowSubCategoriesList), true)] public List<string> subCategories { get; set; } = new List<string>();
 
 	[Group(/*"Tint"*/"Rule"), Order(10), Property, Range(0, 1)] public float? tintOverride { get; set; }
 	[Group(/*"Tint"*/"Rule"), Order(11), Property, Range(0, 1)] public float? chanceOf { get; set; }
 
-	[Hide] public bool shouldShowClothing => clothingRuleType != RuleType.Any;
-	[Hide] public bool shouldShowCategories => clothingRuleType != RuleType.FromListOnly;
-	[Hide] public bool shouldShowCategoriesList => shouldShowCategories && categoriesRuleType != RuleType.Any;
-	[Hide] public bool shouldShowSubCategories => clothingRuleType != RuleType.FromListOnly;
-	[Hide] public bool shouldShowSubCategoriesList => shouldShowCategories && subCategoriesRuleType != RuleType.Any;
+	[Hide] public bool shouldShowClothing => clothingRuleType != DressingTerryRuleType.Any;
+	[Hide] public bool shouldShowCategories => clothingRuleType != DressingTerryRuleType.FromListOnly;
+	[Hide] public bool shouldShowCategoriesList => shouldShowCategories && categoriesRuleType != DressingTerryRuleType.Any;
+	[Hide] public bool shouldShowSubCategories => clothingRuleType != DressingTerryRuleType.FromListOnly;
+	[Hide] public bool shouldShowSubCategoriesList => shouldShowCategories && subCategoriesRuleType != DressingTerryRuleType.Any;
 
 	public ClothingContainer.ClothingEntry GetRandomEntry(List<Clothing> wearingClothing = null)
 	{
 		var invalidClothing = new List<Clothing>(wearingClothing);
-		if (clothingRuleType == RuleType.FromListOnly)
+		if (clothingRuleType == DressingTerryRuleType.FromListOnly)
 		{
 			var clothingFromList = clothing.ToList().Where(x => !invalidClothing.Contains(x));
 			if (clothingFromList.Any())
@@ -109,7 +110,7 @@ public class RuleInst
 		}
 
 		Clothing.ClothingCategory category = Clothing.ClothingCategory.None;
-		if (categoriesRuleType == RuleType.FromListOnly)
+		if (categoriesRuleType == DressingTerryRuleType.FromListOnly)
 		{
 			if (categories.Any())
 			{
@@ -120,7 +121,7 @@ public class RuleInst
 				category = RandomInList(clothingCategories);
 			}
 		}
-		else if (categoriesRuleType == RuleType.Blacklist)
+		else if (categoriesRuleType == DressingTerryRuleType.Blacklist)
 		{			
 			var categoriesTypes = clothingCategories.ToList().Where(x => !categories.Contains(x));
 
@@ -135,7 +136,7 @@ public class RuleInst
 		}
 
 		string subCategory = null;
-		if (subCategoriesRuleType == RuleType.FromListOnly)
+		if (subCategoriesRuleType == DressingTerryRuleType.FromListOnly)
 		{
 			if (subCategories.Any())
 			{
@@ -152,7 +153,7 @@ public class RuleInst
 				}
 			}
 		}
-		else if (subCategoriesRuleType == RuleType.Blacklist)
+		else if (subCategoriesRuleType == DressingTerryRuleType.Blacklist)
 		{
 			if (clothingCategoryToSubCategory.ContainsKey(category))
 			{

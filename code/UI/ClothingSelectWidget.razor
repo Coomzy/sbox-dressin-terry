@@ -171,18 +171,9 @@
         dirty++;
     }
 
-
-    void Input_SelectClothing(Clothing clothes)
-    {
-        SelectClothing(clothes);
-        Play_OnMouseClick();
-    }
-
-    async void SelectClothing(Clothing clothes)
+    void SelectClothing(Clothing clothes)
     {
         incompatibilityList.Clear();
-
-        await Task.FrameEnd();
 
         var clothingContainer = GetPreviewClothingContainer();
 
@@ -200,6 +191,8 @@
 
         RebuildCharacter();
         dirty++;
+
+        Play_OnMouseClick();
     }
 
     void HoverClothing(Clothing clothes)

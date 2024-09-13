@@ -68,6 +68,12 @@
           "BodyGroups": 18446744073709551615,
           "MaterialOverride": "materials/default.vmat",
           "Model": "models/dev/plane.vmdl",
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
           "RenderType": "On",
           "Tint": "0.39546,0.51163,0.27128,1"
         },
@@ -196,6 +202,13 @@
               "BodyGroups": 341,
               "CreateBoneObjects": true,
               "Model": "models/citizen/citizen.vmdl",
+              "Morphs": {},
+              "RenderOptions": {
+                "GameLayer": true,
+                "OverlayLayer": false,
+                "BloomLayer": false,
+                "AfterUILayer": false
+              },
               "RenderType": "On",
               "Tint": "1,1,1,1",
               "UseAnimGraph": true
@@ -1090,17 +1103,6 @@
           "__type": "SaveWidget",
           "__guid": "c45206ff-d9d6-437c-a944-6246bc037256",
           "__enabled": false
-        }
-      ]
-    },
-    {
-      "__guid": "8e97c94e-6a8a-4e04-87a1-32999e297198",
-      "Flags": 0,
-      "Name": "Test",
-      "Components": [
-        {
-          "__type": "TestComponent",
-          "__guid": "23612ed7-2e21-4bbd-afff-0622b3b94848"
         }
       ]
     }

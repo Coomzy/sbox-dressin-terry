@@ -3,7 +3,6 @@ using Sandbox;
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using static Sandbox.Clothing;
 using Sandbox.Citizen;
 
 public static class DressinTerry
@@ -11,9 +10,9 @@ public static class DressinTerry
 	public const string extension = "chr";
 
 	public static List<Clothing> allClothing = new List<Clothing>();
-	public static List<ClothingCategory> clothingCategories = new List<ClothingCategory>();
+	public static List<Clothing.ClothingCategory> clothingCategories = new List<Clothing.ClothingCategory>();
 	public static List<string> clothingSubCategories = new List<string>();
-	public static Dictionary<ClothingCategory, List<string>> clothingCategoryToSubCategory = new Dictionary<ClothingCategory, List<string>>();
+	public static Dictionary<Clothing.ClothingCategory, List<string>> clothingCategoryToSubCategory = new Dictionary<Clothing.ClothingCategory, List<string>>();
 
 	public static ClothingContainer RandomCharacter()
 	{
@@ -40,7 +39,7 @@ public static class DressinTerry
 		return clothingContainer;
 	}
 
-	public static Clothing RandomClothing(ClothingCategory? category = null, string subCategory = null, List<Clothing> wearingClothing = null)
+	public static Clothing RandomClothing(Clothing.ClothingCategory? category = null, string subCategory = null, List<Clothing> wearingClothing = null)
 	{
 		IEnumerable<Clothing> clothing = allClothing.ToList();
 
@@ -68,7 +67,7 @@ public static class DressinTerry
 		return clothing.ElementAt(rndIndex);
 	}
 
-	public static void ApplyClothing(this SkinnedModelRenderer bodyRenderer, ClothingContainer clothingContainer)
+	public static void ApplyClothing(SkinnedModelRenderer bodyRenderer, ClothingContainer clothingContainer)
 	{
 		if (bodyRenderer == null || !bodyRenderer.IsValid)
 		{

@@ -11,7 +11,7 @@
 <root>
     <div class="container">        
         <div class="row">
-            <TextEntry class="save-filepath-entry" style="background-color:darkgray; min-width: 250px;" type="text" placeholder="File path goes here..." Value:bind="@activeFilePath"></TextEntry>
+            <TextEntry @ref=textEntry class="save-filepath-entry" style="background-color:darkgray; min-width: 250px;" type="text" placeholder="File path goes here..." Value:bind="@activeFilePath"></TextEntry>
             <img src="textures/save.png" class="save-image" onclick="@(() => OpenSavePanel())" onmouseover="@Play_OnMouseOver" />
             <img src="textures/load.png" class="load-image" onclick="@(() => OpenLoadPanel())" onmouseover="@Play_OnMouseOver" />
         </div>
@@ -20,9 +20,13 @@
 
 @code
 {
+    protected TextEntry textEntry;
+
     void OpenSavePanel()
     {
         Save(activeFilePath);
+
+        // Save Widget is overkill
         //var saveWidget = GameObject.Components.Get<SaveWidget>(true);
         //saveWidget.Enabled = true;
 
@@ -35,6 +39,14 @@
         loadWidget.Enabled = true;
 
         Play_OnMouseClick();
+    }
+
+    protected override void OnUpdate()
+    {
+        if (!Input.Down("attack1"))
+            return;
+
+        textEntry.Blur();
     }
 
     protected override int BuildHash() => System.HashCode.Combine(RealTime.Now.CeilToInt());

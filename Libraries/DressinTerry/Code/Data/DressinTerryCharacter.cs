@@ -28,7 +28,9 @@ public class DressinTerryCharacter : GameResource
 			Log.Error($"Tried to apply character '{this}' to a null bodyRenderer!");
 			return;
 		}
-		bodyRenderer.ApplyClothing(ToClothingContainer(this));
+
+		//bodyRenderer.ApplyClothing(ToClothingContainer(this));
+		DressinTerry.ApplyClothing(bodyRenderer, ToClothingContainer(this));
 	}
 }
 

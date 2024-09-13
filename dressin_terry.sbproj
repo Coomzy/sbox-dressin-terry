@@ -1,10 +1,10 @@
 {
-  "Title": "Dressin Terry",
+  "Title": "Dressin Terry [TOOL]",
   "Type": "game",
-  "Org": "local",
+  "Org": "coomzy",
   "Ident": "dressin_terry",
   "Schema": 1,
-  "IncludeSourceFiles": false,
+  "IncludeSourceFiles": true,
   "Resources": null,
   "PackageReferences": [],
   "EditorReferences": null,
